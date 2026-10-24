@@ -1,0 +1,13 @@
+# Product contract and design
+
+Target user: a maintainer migrating a site whose old/current route manifests and planned exact permanent redirects are available before deployment.
+
+Acceptance: validate a complete CSV without modifying it or requesting network access; require a mapping for every retired route; require internal terminal membership in a current-page inventory; reject source/page collisions, duplicate sources, self/cyclic redirects, invalid URLs and mixed permanent-status chains; export every source only after a passing audit and never overwrite existing paths.
+
+The model is a functional directed graph. A source has one target and either 301 or 308 status. Duplicate sources are marked ambiguous, with incoming paths unresolved. Iterative walking records positions in the current trail to find cycles; memoized terminal/hop/status outcomes are reused across sources. Each source is resolved once. Only bounded samples enter the user report, but every error contributes to full aggregate counts. Full chains are not stored for every source. Inventories are sets of exact rooted route strings. Coverage means mapping presence plus all other checks passing, not live site reachability.
+
+Origin normalization is separate from route equality. Scheme/host/default port and IDNA normalize origin identity. Same-site absolute URLs become rooted routes when an explicit origin is supplied; other absolute URLs need explicit external-origin permission and remain terminal. Query spelling, case, slash and percent representation stay exact. Fragments are rejected because browser fragment inheritance would require a richer model. Decoding is only used to reject dot segments and encoded path controls/backslashes.
+
+Boundaries: no server emulation, regular expression evaluation, prefix rules, network checks, content equivalence judgments, status 302/303/307, or automated deployment. A correct real-world server may normalize routes in ways this model does not represent. Inventories and maps must share the server's route representation. Reports can contain private query/path metadata. Inputs should be stable while read; file-size guards do not prevent another process from changing a file concurrently. The process-wide CSV field limit is restored on return but threaded concurrent API use is unsupported.
+
+Tests: independently generated CSV fixtures, CLI subprocesses and no-overwrite assertions; old/current inventory invariants; literal URI/query semantics; exact external origin policy; a 20,000-hop chain; 40 seeded graph fixtures compared against a separate set-based walk oracle. These are correctness checks, not claims of measured market adoption or throughput benchmarks.

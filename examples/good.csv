@@ -1,0 +1,4 @@
+source,target,status
+/old-guide,/guide,301
+/guide,/docs/start,301
+/legacy-api,/docs/api,308

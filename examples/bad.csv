@@ -1,0 +1,7 @@
+source,target,status
+/old-guide,/missing,301
+/loop-a,/loop-b,301
+/loop-b,/loop-a,301
+/duplicate,/one,301
+/duplicate,/two,301
+/self,/self,301
