@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from redirect_map_audit.core import InputError, analyze, origin_key
+from redirect_inventory_audit.core import InputError, analyze, origin_key
 
 
 class RouteTests(unittest.TestCase):
@@ -259,7 +259,7 @@ class RouteTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "redirect_map_audit",
+                "redirect_inventory_audit",
                 str(self.path),
                 "--flatten",
                 str(flat),
@@ -274,7 +274,14 @@ class RouteTests(unittest.TestCase):
         self.make([("/loop", "/loop", "301")])
         blocked = self.root / "blocked.csv"
         result = subprocess.run(
-            [sys.executable, "-m", "redirect_map_audit", str(self.path), "--flatten", str(blocked)],
+            [
+                sys.executable,
+                "-m",
+                "redirect_inventory_audit",
+                str(self.path),
+                "--flatten",
+                str(blocked),
+            ],
             capture_output=True,
             text=True,
         )
@@ -282,7 +289,7 @@ class RouteTests(unittest.TestCase):
         self.assertFalse(blocked.exists())
 
     def test_operational_errors_and_terminal_escaping(self):
-        from redirect_map_audit.cli import main
+        from redirect_inventory_audit.cli import main
 
         self.make([("/old\x1b[31m", "/new", "301")])
         output = io.StringIO()

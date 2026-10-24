@@ -3,7 +3,7 @@ requires = ["setuptools>=78"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "redirect-map-audit"
+name = "redirect-inventory-audit"
 version = "0.1.0"
 description = "Offline redirect maps checked against retired and current route inventories"
 readme = "README.md"
@@ -15,14 +15,14 @@ keywords = ["cli", "offline", "validation"]
 classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
 
 [project.scripts]
-redirect-map-audit = "redirect_map_audit.cli:main"
+redirect-inventory-audit = "redirect_inventory_audit.cli:main"
 
 [project.urls]
-Repository = "https://github.com/KanadeK/redirect-map-audit"
-Issues = "https://github.com/KanadeK/redirect-map-audit/issues"
+Repository = "https://github.com/KanadeK/redirect-inventory-audit"
+Issues = "https://github.com/KanadeK/redirect-inventory-audit/issues"
 
 [tool.setuptools.packages.find]
-include = ["redirect_map_audit*"]
+include = ["redirect_inventory_audit*"]
 
 [tool.ruff]
 target-version = "py310"

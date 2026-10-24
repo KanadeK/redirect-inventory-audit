@@ -1,4 +1,4 @@
-# redirect-map-audit
+# redirect-inventory-audit
 
 Audit a permanent redirect CSV **before a website migration goes live**. Check retired-route coverage and final destination inventory, find cycles/ambiguous sources, and export a passing map as one-hop redirects. Fully offline; Python standard library only.
 
@@ -11,18 +11,18 @@ A redirect can point to a syntactically valid path that does not exist in the ne
 Requires Python 3.10+. From a clone:
 
 ```sh
-git clone https://github.com/KanadeK/redirect-map-audit.git
-cd redirect-map-audit
+git clone https://github.com/KanadeK/redirect-inventory-audit.git
+cd redirect-inventory-audit
 python -m venv .venv
 ```
 
-Activate with `source .venv/bin/activate` on macOS/Linux or `.venv\Scripts\Activate.ps1` in Windows PowerShell, then `python -m pip install .`. An activation-free checkout command is `python -m redirect_map_audit`. The v0.1.0 GitHub Release includes a wheel for `python -m pip install <downloaded-wheel.whl>`. No PyPI availability is claimed.
+Activate with `source .venv/bin/activate` on macOS/Linux or `.venv\Scripts\Activate.ps1` in Windows PowerShell, then `python -m pip install .`. An activation-free checkout command is `python -m redirect_inventory_audit`. The v0.1.0 GitHub Release includes a wheel for `python -m pip install <downloaded-wheel.whl>`. No PyPI availability is claimed.
 
 ## Complete demo
 
 ```sh
-redirect-map-audit examples/good.csv --old-paths examples/old.txt --new-paths examples/new.txt --flatten flattened.csv --json
-redirect-map-audit examples/bad.csv --json
+redirect-inventory-audit examples/good.csv --old-paths examples/old.txt --new-paths examples/new.txt --flatten flattened.csv --json
+redirect-inventory-audit examples/bad.csv --json
 ```
 
 The first exits `0` and writes:
@@ -51,7 +51,7 @@ Inventories are plain UTF-8 text, one route per line. Blank lines and lines star
 By default, sources and local targets use rooted routes such as `/old?lang=en`. Preserve exact case, trailing slash, query ordering and percent spelling; `/A`, `/a`, `/a/`, `/a?x=1` and `/%61` are separate strings. No percent decoding or Unicode normalization is used for matching. Decoding is used only to reject dot segments and encoded path controls/backslashes. Your inventories must use the same representation as your routing configuration.
 
 ```sh
-redirect-map-audit redirects.csv --origin https://example.org --allow-origin https://docs.example.org --new-paths current.txt --json
+redirect-inventory-audit redirects.csv --origin https://example.org --allow-origin https://docs.example.org --new-paths current.txt --json
 ```
 
 With `--origin`, absolute URLs on that origin are converted to rooted routes, including query strings. Host case, IDNA names and default ports are normalized for origin comparisons. Other absolute targets require a matching `--allow-origin` (repeatable); comparison includes scheme, host and port. An allowlist entry allows that entire origin, not just one path. External URLs are treated as terminal destinations; the tool never follows them. Without `--origin`, an absolute URL is external, even if you consider it your own site.
@@ -80,7 +80,7 @@ python -m unittest discover -s tests -v
 ruff check .
 ruff format --check .
 python -m build
-python -m pip uninstall redirect-map-audit
+python -m pip uninstall redirect-inventory-audit
 ```
 
 Tests include CLI/export flows, no-overwrite behavior, input byte preservation, inventory failures, origin/query rules, a 20,000-hop chain and seeded random graphs checked with an independent walk oracle. CI covers Linux/Windows/macOS and Python 3.10/3.13; inspect the actual Actions run for status. No settings or cache are stored. Remove your exported CSVs, downloaded artifacts and virtual environment when no longer needed; source files are unchanged.
